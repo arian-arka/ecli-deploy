@@ -1,0 +1,60 @@
+/// <reference types="node" />
+import { Runner } from "./Runner";
+import { Client, FileEntryWithStats, SFTPWrapper } from "ssh2";
+type CommandReturnType<T = string> = {
+    command: string;
+    started_at: Date;
+    ended_at: Date;
+    seconds: number;
+    output: T;
+    error?: Error;
+};
+export declare class SFTPRunner extends Runner {
+    protected startedReading: boolean;
+    protected stfp?: SFTPWrapper;
+    protected process?: Client;
+    protected outputBuffer: string;
+    protected currentId: number;
+    protected connectionRejector?: (e: Error) => void;
+    private makeProps;
+    protected makeClient(): Promise<Client>;
+    private makeOutputClean;
+    protected throwError(data: string | Error): void;
+    protected onceEvents(client: Client): void;
+    protected makeEvents(): void;
+    start(): Promise<SFTPRunner>;
+    execute(): Promise<any>;
+    close(): void;
+    private logResult;
+    getFile(remotePath: string, localPath: string): Promise<CommandReturnType>;
+    putFile(localPath: string, remotePath: string): Promise<CommandReturnType>;
+    readFile(remotePath: string): Promise<CommandReturnType>;
+    writeFile(remotePath: string, data: string | Buffer): Promise<CommandReturnType>;
+    appendFile(remotePath: string, data: string | Buffer): Promise<CommandReturnType>;
+    opendir(path: string): Promise<CommandReturnType>;
+    readdir(path: string): Promise<CommandReturnType<FileEntryWithStats[]>>;
+    unlink(path: string): Promise<CommandReturnType>;
+    rename(src: string, dst: string): Promise<CommandReturnType>;
+    mkdir(path: string): Promise<CommandReturnType>;
+    rmdir(path: string): Promise<CommandReturnType>;
+    stat(path: string): Promise<CommandReturnType<{
+        isDirectory: boolean;
+        isFile: boolean;
+        isCharacterDevice: boolean;
+        isBlockDevice: boolean;
+        isSymbolicLink: boolean;
+        isFIFO: boolean;
+        isSocket: boolean;
+        gid: number;
+        size: number;
+        uid: number;
+        mode: number;
+        mtime: number;
+        atime: number;
+    }>>;
+    exists(path: string): Promise<CommandReturnType<boolean>>;
+    chown(path: string, uid: number, gid: number): Promise<CommandReturnType>;
+    chmod(path: string, mode: number | string): Promise<CommandReturnType>;
+    realpath(path: string): Promise<CommandReturnType>;
+}
+export {};

@@ -1,0 +1,9 @@
+notes.txt
+/node_modules
+/.idea
+push.bash
+push.sh
+/docs
+/docs/*
+/custom-directives
+/custom-directives/*

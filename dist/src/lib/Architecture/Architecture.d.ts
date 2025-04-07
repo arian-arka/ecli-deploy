@@ -1,0 +1,52 @@
+import BashStub, { ResolvedFlowType } from "../Bash/BashStub";
+type ArchitectureType = {
+    title: string;
+    description: string;
+    assets?: string;
+    flows: (string[])[];
+    "cwd"?: string;
+    "ask-cwd"?: boolean;
+    "user"?: string;
+    "ask-user"?: boolean;
+    "pass"?: string;
+    "ask-pass"?: boolean;
+    "host"?: string;
+    "ask-host"?: boolean;
+    "port"?: number;
+    "ask-port"?: boolean;
+    "private-key"?: string;
+    "ask-private-key"?: boolean;
+    "passphrase"?: string;
+    "ask-passphrase"?: boolean;
+    "log"?: string;
+    "ask-log"?: boolean;
+    "log-dir"?: string;
+    "ask-log-dir"?: boolean;
+};
+export type ResolvedArchitectureType = {
+    title: string;
+    description: string;
+    assets?: string;
+    flows: (ResolvedFlowType[])[];
+    "cwd"?: string;
+    "user"?: string;
+    "pass"?: string;
+    "host"?: string;
+    "port"?: number;
+    "private-key"?: string;
+    "passphrase"?: string;
+    "log"?: string;
+    "log-dir"?: string;
+};
+export default class Architecture {
+    private architecture;
+    private readonly bashStub;
+    private readonly assetsPath;
+    constructor(architecture: ArchitectureType, bashStub: BashStub, assetsPath: string);
+    private validate;
+    private makeStubVariables;
+    private readAskedVariables;
+    resolve(): Promise<ResolvedArchitectureType>;
+    static of(base: string, architecture: string, env: string): Promise<Architecture>;
+}
+export {};

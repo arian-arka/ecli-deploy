@@ -1,0 +1,42 @@
+{
+  "features": {
+    "type": "array",
+    "required": true,
+    "rules": [
+      "min:0",
+      "max:100"
+    ],
+    "children": [
+      {
+        "type": "array-item",
+        "required": true,
+        "rules": [],
+        "children": {
+          "values": {
+            "type": "array",
+            "required": true,
+            "rules": [],
+            "children": [
+              {
+                "type": "array-item",
+                "required": true,
+                "rules": [],
+                "children": {
+                  "value": {
+                    "type": "string",
+                    "required": true,
+                    "rules": [
+                      "required",
+                      "max:1000"
+                    ],
+                    "children": {}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
