@@ -13,9 +13,6 @@
     "just-push": "git add -A && git commit -m \"msg\" && git push",
     "deploy-local": "rm -r dist & tsc &  bash dl.sh"
   },
-  "files": [
-    "/dist"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arian-arka/ecli.git"

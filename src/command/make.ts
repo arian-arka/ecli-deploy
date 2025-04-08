@@ -17,7 +17,7 @@ export default class make extends Command {
         base?: string,
         name: string
     }) {
-        return await this.zip(args);
+        return await this.dir(args);
     }
     async dir(args: {
         base?: string,
@@ -27,5 +27,6 @@ export default class make extends Command {
         const deployment = await Deployment.of(basePath, args.name);
         return await deployment.save();
     }
+
 
 }

@@ -13,7 +13,7 @@ class make extends Command_1.Command {
         return await deployment.zip();
     }
     async index(args) {
-        return await this.zip(args);
+        return await this.dir(args);
     }
     async dir(args) {
         const basePath = (0, path_1.joinPaths)(!!args.base ? args.base : './');

@@ -7,3 +7,4 @@ push.sh
 /docs/*
 /custom-directives
 /custom-directives/*
+package-lock.json

@@ -1,6 +1,4 @@
-import {CommandReturnType, ExecCommandReturnType, SSHRunner} from "../../Runner/SSHRunner";
-import {SFTPRunner} from "../../Runner/SFTPRunner";
-import DeployChunk from "../DeployChunk";
+
 import DeployBashFile from "../DeployBashFile";
 
 const defaultVersion = '0.40.2';

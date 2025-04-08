@@ -4,24 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const DeployBashFile_1 = __importDefault(require("../DeployBashFile"));
-const defaultVersion = '0.0.0';
-const defaultNodeVersion = '20.14.0';
-class DeployEcli extends DeployBashFile_1.default {
+class DeployGit extends DeployBashFile_1.default {
     constructor() {
-        var _a;
         super(...arguments);
         this.bash = [
             `#!/bin/bash`,
             `source $HOME/.bashrc`,
-            `npm install -g https://github.com/arian-arka/ecli/tarball/master`,
-            `cd $HOME/.nvm/versions/node/v${(_a = this.props.nodeVersion) !== null && _a !== void 0 ? _a : defaultNodeVersion}/lib && chmod -R a+x node_modules `,
+            `sudo apt install git -y 2>/dev/null`,
         ];
         this.cwd = crypto.randomUUID();
         this.clearCwd = true;
     }
     async condition() {
         try {
-            await this.runExec('ecli');
+            await this.runExec('git');
             return false;
         }
         catch (e) {
@@ -29,4 +25,4 @@ class DeployEcli extends DeployBashFile_1.default {
         }
     }
 }
-exports.default = DeployEcli;
+exports.default = DeployGit;

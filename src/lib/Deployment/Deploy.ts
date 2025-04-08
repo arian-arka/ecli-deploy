@@ -3,10 +3,16 @@ import {DeploymentType} from "./Deployment";
 import {SFTPRunner} from "../Runner/SFTPRunner";
 import Logger from "../Logger/Logger";
 import {joinPaths} from "ecli-base/dist/src/lib/helper/path";
-import { SSHRunner} from "../Runner/SSHRunner";
+import {SSHRunner} from "../Runner/SSHRunner";
 import DeployNvm from "./DeployBashFile/DeployNvm";
 import DeployNode from "./DeployBashFile/DeployNode";
 import DeployFiles from "./DeployBashFile/DeployFiles";
+import DeployGit from "./DeployBashFile/DeployGit";
+import DeployEcli from "./DeployBashFile/DeployEcli";
+import DeployEcliDeploy from "./DeployBashFile/DeployEcliDeploy";
+import DeployServer from "./DeployServer";
+import RemoveDeployment from "./DeployBashFile/RemoveDeployment";
+import DeployDeployment from "./DeployBashFile/DeployDeployment";
 
 type StepsStageType = ({
     done: boolean,
@@ -63,7 +69,7 @@ export default class Deploy {
         this.now = props.now ?? new Date;
         // @ts-ignore
         this.isoNow = this.now.toISOString().replaceAll(':', '-');
-        this.remoteLogPath = `logs/${this.isoNow}`;
+        this.remoteLogPath = `log/${this.isoNow}`;
 
         this.deployment = this.findDeployment();
 
@@ -79,7 +85,7 @@ export default class Deploy {
     }
 
     protected findDeployment(): DeploymentType {
-        return File.readJson({path: joinPaths(this.props.base ?? './','dist', this.props.deployment, 'deploy.json')}) as DeploymentType;
+        return File.readJson({path: joinPaths(this.props.base ?? './', 'dist', this.props.deployment, 'deploy.json')}) as DeploymentType;
     }
 
     protected async destroyRunners() {
@@ -90,6 +96,14 @@ export default class Deploy {
 
             }
         }
+    }
+
+    public async close() {
+        await this.destroyRunners();
+    }
+
+    public async start() {
+        await this.makeRunners();
     }
 
     protected async makeRunners() {
@@ -118,7 +132,7 @@ export default class Deploy {
             passphrase: this.remote.passphrase,
             port: this.remote.port,
             logger: (new Logger({
-                path: joinPaths(this.props.base ?? './','log', '_ssh.log'),
+                path: joinPaths(this.props.base ?? './', this.remoteLogPath, '_ssh.log'),
                 //path: joinPaths(this.logBase, '_ssh.log'),
                 //rewrite: true,
                 pipeString: (data) => {
@@ -142,7 +156,7 @@ export default class Deploy {
             port: this.remote.port,
             cwd: this.remote.cwd,
             logger: (new Logger({
-                path: joinPaths(this.props.base ?? './','log', '_sftp.log'),
+                path: joinPaths(this.props.base ?? './', this.remoteLogPath, '_sftp.log'),
                 //path: joinPaths(this.logBase, '_sftp.log'),
                 //rewrite: true,
                 pipeString: (data) => {
@@ -156,29 +170,36 @@ export default class Deploy {
             .start();
     }
 
-    protected async runChunks() {
+    public async deployEcliRepo() {
         for (const chunk of [
+            new DeployGit(this.ssh as SSHRunner, this.sftp, {}),
             new DeployNvm(this.ssh as SSHRunner, this.sftp, {version: this.props.nvmVersion}),
             new DeployNode(this.ssh as SSHRunner, this.sftp, {version: this.props.nodeVersion}),
-            // new DeployFiles(this.ssh as SSHRunner, this.sftp, {
-            //     base: this.props.base ?? './',
-            //     deployment: this.props.deployment,
-            //     cwd: (this.deployment.env['CWD'] ?? '') as string,
-            // }),
-        ]){
+            new DeployEcli(this.ssh as SSHRunner, this.sftp, {nodeVersion: this.props.nodeVersion}),
+            new DeployEcliDeploy(this.ssh as SSHRunner, this.sftp, {}),
+        ]) {
             await chunk.make();
         }
     }
 
-    protected async runArchitectures(){
-
+    public async removeDeployment() {
+        for (const chunk of [
+            new RemoveDeployment(this.ssh as SSHRunner, this.sftp, {name: this.deployment.name}),
+        ]) {
+            await chunk.make();
+        }
     }
 
-    public async run(){
-        await this.makeRunners();
-        await this.runChunks();
-        await this.destroyRunners();
-        //await this.runArchitectures();
+    public async deployServer(force ?: boolean) {
+        for (const chunk of [
+            new DeployDeployment(this.ssh as SSHRunner, this.sftp, {
+                base: this.props.base ?? './',
+                name: this.props.deployment,
+                force
+            }),
+        ]) {
+            await chunk.make();
+        }
     }
 
 }

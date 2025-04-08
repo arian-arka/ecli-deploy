@@ -1,10 +1,9 @@
 import DeployBashFile from "../DeployBashFile";
-export default class DeployEcli extends DeployBashFile<{
+export default class DeployEcliDeploy extends DeployBashFile<{
     version?: string;
-    nodeVersion?: string;
 }> {
     protected bash: string[];
-    protected cwd: `${string}-${string}-${string}-${string}-${string}`;
+    protected cwd: string;
     protected clearCwd: boolean;
     protected condition(): Promise<boolean>;
 }

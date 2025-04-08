@@ -1,6 +1,4 @@
-import {CommandReturnType, ExecCommandReturnType, SSHRunner} from "../../Runner/SSHRunner";
-import {SFTPRunner} from "../../Runner/SFTPRunner";
-import DeployChunk from "../DeployChunk";
+
 import DeployBashFile from "../DeployBashFile";
 import {joinPaths} from "ecli-base/dist/src/lib/helper/path";
 import {Zip} from "zip-lib";
@@ -13,7 +11,7 @@ export default class DeployFiles extends DeployBashFile<{
     cwd : string,
 }> {
     protected bash = [];
-    protected cwd = this.props.cwd;
+    protected cwd = "$HOME/.ecli-deploy";
     protected async afterCondition(): Promise<any> {
         const localZipFile = this.props.deployment + '.zip';
         const localZipFilePath = joinPaths(this.props.base,'dist',this.props.deployment, localZipFile);

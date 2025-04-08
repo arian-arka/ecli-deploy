@@ -10,6 +10,9 @@ const path_1 = require("ecli-base/dist/src/lib/helper/path");
 const SSHRunner_1 = require("../Runner/SSHRunner");
 const DeployNvm_1 = __importDefault(require("./DeployBashFile/DeployNvm"));
 const DeployNode_1 = __importDefault(require("./DeployBashFile/DeployNode"));
+const DeployGit_1 = __importDefault(require("./DeployBashFile/DeployGit"));
+const DeployEcli_1 = __importDefault(require("./DeployBashFile/DeployEcli"));
+const DeployEcliDeploy_1 = __importDefault(require("./DeployBashFile/DeployEcliDeploy"));
 class Deploy {
     constructor(props) {
         var _a, _b, _c, _d, _e, _f, _g, _h;
@@ -17,7 +20,7 @@ class Deploy {
         this.now = (_a = props.now) !== null && _a !== void 0 ? _a : new Date;
         // @ts-ignore
         this.isoNow = this.now.toISOString().replaceAll(':', '-');
-        this.remoteLogPath = `logs/${this.isoNow}`;
+        this.remoteLogPath = `log/${this.isoNow}`;
         this.deployment = this.findDeployment();
         this.remote = {
             cwd: ((_b = this.deployment.env['CWD']) !== null && _b !== void 0 ? _b : ''),
@@ -41,6 +44,12 @@ class Deploy {
             catch (e) {
             }
         }
+    }
+    async close() {
+        await this.destroyRunners();
+    }
+    async start() {
+        await this.makeRunners();
     }
     async makeRunners() {
         // const sftpRawLogger = (new Logger({
@@ -68,7 +77,7 @@ class Deploy {
             passphrase: this.remote.passphrase,
             port: this.remote.port,
             logger: (new Logger_1.default({
-                path: (0, path_1.joinPaths)((_a = this.props.base) !== null && _a !== void 0 ? _a : './', 'log', '_ssh.log'),
+                path: (0, path_1.joinPaths)((_a = this.props.base) !== null && _a !== void 0 ? _a : './', this.remoteLogPath, '_ssh.log'),
                 //path: joinPaths(this.logBase, '_ssh.log'),
                 //rewrite: true,
                 pipeString: (data) => {
@@ -90,7 +99,7 @@ class Deploy {
             port: this.remote.port,
             cwd: this.remote.cwd,
             logger: (new Logger_1.default({
-                path: (0, path_1.joinPaths)((_b = this.props.base) !== null && _b !== void 0 ? _b : './', 'log', '_sftp.log'),
+                path: (0, path_1.joinPaths)((_b = this.props.base) !== null && _b !== void 0 ? _b : './', this.remoteLogPath, '_sftp.log'),
                 //path: joinPaths(this.logBase, '_sftp.log'),
                 //rewrite: true,
                 pipeString: (data) => {
@@ -103,10 +112,13 @@ class Deploy {
             //.onOutput((data) => console.log(data))
             .start();
     }
-    async runChunks() {
+    async deployRepo() {
         for (const chunk of [
+            new DeployGit_1.default(this.ssh, this.sftp, {}),
             new DeployNvm_1.default(this.ssh, this.sftp, { version: this.props.nvmVersion }),
             new DeployNode_1.default(this.ssh, this.sftp, { version: this.props.nodeVersion }),
+            new DeployEcli_1.default(this.ssh, this.sftp, { nodeVersion: this.props.nodeVersion }),
+            new DeployEcliDeploy_1.default(this.ssh, this.sftp, {}),
             // new DeployFiles(this.ssh as SSHRunner, this.sftp, {
             //     base: this.props.base ?? './',
             //     deployment: this.props.deployment,
@@ -119,9 +131,6 @@ class Deploy {
     async runArchitectures() {
     }
     async run() {
-        await this.makeRunners();
-        await this.runChunks();
-        await this.destroyRunners();
         //await this.runArchitectures();
     }
 }

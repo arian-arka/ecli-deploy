@@ -7,7 +7,12 @@ import Directory from "ecli-base/dist/src/lib/sys/Directory";
 import Terminal from "ecli-base/dist/src/lib/sys/Terminal";
 
 export default class make extends Command {
-
+    async log(args: {
+        base?: string,
+    }) {
+        const path = joinPaths(!!args.base ? args.base : './','log');
+        Directory.delete({path})
+    }
     async index(args: {
         base?: string,
         dist?: boolean|string,

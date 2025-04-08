@@ -8,6 +8,10 @@ const path_1 = require("ecli-base/dist/src/lib/helper/path");
 const Reader_1 = require("../lib/Reader");
 const Directory_1 = __importDefault(require("ecli-base/dist/src/lib/sys/Directory"));
 class make extends Command_1.Command {
+    async log(args) {
+        const path = (0, path_1.joinPaths)(!!args.base ? args.base : './', 'log');
+        Directory_1.default.delete({ path });
+    }
     async index(args) {
         const basePath = (0, path_1.joinPaths)(!!args.base ? args.base : './');
         const { sure } = await (0, Reader_1.Input)({

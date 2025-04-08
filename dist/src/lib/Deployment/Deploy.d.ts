@@ -17,8 +17,10 @@ export default class Deploy {
     });
     protected findDeployment(): DeploymentType;
     protected destroyRunners(): Promise<void>;
+    close(): Promise<void>;
+    start(): Promise<void>;
     protected makeRunners(): Promise<void>;
-    protected runChunks(): Promise<void>;
+    deployRepo(): Promise<void>;
     protected runArchitectures(): Promise<void>;
     run(): Promise<void>;
 }
