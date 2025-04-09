@@ -11,7 +11,7 @@ class DeployFiles extends DeployBashFile_1.default {
     constructor() {
         super(...arguments);
         this.bash = [];
-        this.cwd = this.props.cwd;
+        this.cwd = "$HOME/.ecli-deploy";
     }
     async afterCondition() {
         var _a;

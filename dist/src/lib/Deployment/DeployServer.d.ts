@@ -1,40 +1,44 @@
-import { DeploymentType } from "./Deployment";
-export default class DeployArchitecture {
-    private readonly props;
-    private gatherSteps;
-    private setStepLastArchitecture;
-    private setStepLastFlow;
-    private setStepLastStage;
-    private pushLastStepCommand;
-    private stepsDone;
-    private lastRunningStage;
-    private architectureCounter;
-    private workingDir;
+export default class DeployServer {
+    protected readonly props: {
+        base?: string;
+        nvmVersion?: string;
+        nodeVersion?: string;
+        remote?: {
+            cwd?: string;
+            host?: string;
+            username?: string;
+            password?: string;
+            private_key?: string;
+            private_key_file?: string;
+            passphrase?: string;
+            port?: number;
+        };
+    };
     private sftp?;
     private ssh?;
-    private logBase;
     private now;
+    private isoNow;
+    private remoteLogPath;
     constructor(props: {
-        deployment: DeploymentType;
-        architectures?: string[];
-        remote: {
-            user?: string;
-            pass?: string;
-            host?: string;
-            port?: number;
-            private_key?: string;
-            passphrase?: string;
+        base?: string;
+        nvmVersion?: string;
+        nodeVersion?: string;
+        remote?: {
             cwd?: string;
+            host?: string;
+            username?: string;
+            password?: string;
+            private_key?: string;
+            private_key_file?: string;
+            passphrase?: string;
+            port?: number;
         };
-        base: string;
-        logBase: string;
     });
-    private destroyRunners;
-    private startRunners;
-    private copyFiles;
-    private makeFiles;
-    private makeArchitectureRunner;
-    private executeArchitecture;
-    private executeArchitectures;
-    start(): Promise<boolean>;
+    install(): Promise<void>;
+    send(name: string, force: boolean): Promise<void>;
+    remove(name: string): Promise<void>;
+    run(name: string): Promise<import("../Runner/SSHRunner").ExecCommandReturnType | undefined>;
+    result(name: string): Promise<void>;
+    start(): Promise<void>;
+    close(): Promise<void>;
 }

@@ -6,10 +6,10 @@ type ArchitectureType = {
     flows: (string[])[];
     "cwd"?: string;
     "ask-cwd"?: boolean;
-    "user"?: string;
-    "ask-user"?: boolean;
-    "pass"?: string;
-    "ask-pass"?: boolean;
+    "username"?: string;
+    "ask-username"?: boolean;
+    "password"?: string;
+    "ask-password"?: boolean;
     "host"?: string;
     "ask-host"?: boolean;
     "port"?: number;
@@ -29,8 +29,8 @@ export type ResolvedArchitectureType = {
     assets?: string;
     flows: (ResolvedFlowType[])[];
     "cwd"?: string;
-    "user"?: string;
-    "pass"?: string;
+    "username"?: string;
+    "password"?: string;
     "host"?: string;
     "port"?: number;
     "private-key"?: string;

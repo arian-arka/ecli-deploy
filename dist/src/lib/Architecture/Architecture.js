@@ -26,15 +26,15 @@ const buildableKeys = {
         nullable: true,
         question: "cwd: ",
     },
-    "user": {
+    "username": {
         type: "string",
         nullable: true,
-        question: "user: ",
+        question: "username: ",
     },
-    "pass": {
+    "password": {
         type: "string",
         nullable: true,
-        question: "pass: ",
+        question: "password: ",
     },
     "host": {
         type: "string",
@@ -86,8 +86,8 @@ class Architecture {
         (0, node_assert_1.default)(!!architecture.cwd, 'cwd is required');
         (0, node_assert_1.default)(!!architecture.host, 'host is required');
         if (!['localhost', '127.0.0.1'].includes((_a = architecture.host) !== null && _a !== void 0 ? _a : '')) {
-            (0, node_assert_1.default)(!!architecture.user, 'user is required');
-            (0, node_assert_1.default)(!!architecture.pass || !!architecture["private-key"], 'pass or private-key is required');
+            (0, node_assert_1.default)(!!architecture.username, 'username is required');
+            (0, node_assert_1.default)(!!architecture.password || !!architecture["private-key"], 'password or private-key is required');
         }
         (0, node_assert_1.default)(!!architecture.log, 'log is required');
         (0, node_assert_1.default)(!!architecture['log-dir'], 'log-dir is required');
@@ -145,8 +145,8 @@ class Architecture {
             assets: this.architecture.assets,
             flows: await this.bashStub.resolveFlows(this.architecture.flows),
             cwd: this.architecture.cwd,
-            user: this.architecture.user,
-            pass: this.architecture.pass,
+            username: this.architecture.username,
+            password: this.architecture.password,
             host: this.architecture.host,
             port: this.architecture.port,
             "private-key": !!this.architecture["private-key"] ? File_1.default.read({ path: this.architecture["private-key"] }) : undefined,
@@ -210,21 +210,21 @@ __decorate([
                 type: 'boolean',
                 nullable: true,
             },
-            user: {
+            username: {
                 type: 'string',
                 maxLength: 1000,
                 nullable: true,
             },
-            "ask-user": {
+            "ask-username": {
                 type: 'boolean',
                 nullable: true,
             },
-            pass: {
+            password: {
                 type: 'string',
                 maxLength: 1000,
                 nullable: true,
             },
-            "ask-pass": {
+            "ask-password": {
                 type: 'boolean',
                 nullable: true,
             },

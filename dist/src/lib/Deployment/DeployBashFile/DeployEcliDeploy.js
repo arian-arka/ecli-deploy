@@ -12,6 +12,7 @@ class DeployEcliDeploy extends DeployBashFile_1.default {
             `source $HOME/.bashrc`,
             `mkdir -p .ecli-deploy`,
             `cd .ecli-deploy`,
+            `mkdir -p deployment`,
             `git clone https://github.com/arian-arka/ecli-deploy`,
             `cd ecli-deploy`,
             `ecli _alias name:deploy commands:./dist/src/command force:true "build:npm run dev"`
@@ -21,7 +22,7 @@ class DeployEcliDeploy extends DeployBashFile_1.default {
     }
     async condition() {
         try {
-            await this.runExec('ecli explain command:deploy');
+            await this.runExec('ecli explain command:deploy.hello');
             return false;
         }
         catch (e) {

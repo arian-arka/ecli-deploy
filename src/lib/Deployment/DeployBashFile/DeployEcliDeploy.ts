@@ -18,7 +18,7 @@ export default class DeployEcliDeploy extends DeployBashFile<{
 
     protected async condition(): Promise<boolean> {
         try {
-            await this.runExec('ecli explain command:deploy');
+            await this.runExec('ecli explain command:deploy.hello');
             return false;
         } catch (e) {
             return true;

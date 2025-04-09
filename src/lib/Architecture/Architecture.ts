@@ -14,10 +14,10 @@ type ArchitectureType = {
     flows: (string[])[],
     "cwd"?: string,
     "ask-cwd"?: boolean,
-    "user"?: string,
-    "ask-user"?: boolean,
-    "pass"?: string,
-    "ask-pass"?: boolean,
+    "username"?: string,
+    "ask-username"?: boolean,
+    "password"?: string,
+    "ask-password"?: boolean,
     "host"?: string,
     "ask-host"?: boolean,
     "port"?: number,
@@ -38,8 +38,8 @@ export type ResolvedArchitectureType = {
     assets?: string,
     flows: (ResolvedFlowType[])[],
     "cwd"?: string,
-    "user"?: string,
-    "pass"?: string,
+    "username"?: string,
+    "password"?: string,
     "host"?: string,
     "port"?: number,
     "private-key"?: string,
@@ -54,15 +54,15 @@ const buildableKeys: InputArgsType = {
         nullable: true,
         question: "cwd: ",
     },
-    "user": {
+    "username": {
         type: "string",
         nullable: true,
-        question: "user: ",
+        question: "username: ",
     },
-    "pass": {
+    "password": {
         type: "string",
         nullable: true,
-        question: "pass: ",
+        question: "password: ",
     },
     "host": {
         type: "string",
@@ -156,22 +156,22 @@ export default class Architecture {
                 nullable: true,
             },
 
-            user: {
+            username: {
                 type: 'string',
                 maxLength: 1000,
                 nullable: true,
             },
-            "ask-user": {
+            "ask-username": {
                 type: 'boolean',
                 nullable: true,
             },
 
-            pass: {
+            password: {
                 type: 'string',
                 maxLength: 1000,
                 nullable: true,
             },
-            "ask-pass": {
+            "ask-password": {
                 type: 'boolean',
                 nullable: true,
             },
@@ -250,8 +250,8 @@ export default class Architecture {
         assert(!!architecture.host, 'host is required');
 
         if (!['localhost', '127.0.0.1'].includes(architecture.host ?? '')) {
-            assert(!!architecture.user, 'user is required');
-            assert(!!architecture.pass || !!architecture["private-key"], 'pass or private-key is required');
+            assert(!!architecture.username, 'username is required');
+            assert(!!architecture.password || !!architecture["private-key"], 'password or private-key is required');
         }
 
         assert(!!architecture.log, 'log is required');
@@ -315,8 +315,8 @@ export default class Architecture {
             assets : this.architecture.assets,
             flows: await this.bashStub.resolveFlows(this.architecture.flows),
             cwd: this.architecture.cwd,
-            user: this.architecture.user,
-            pass: this.architecture.pass,
+            username: this.architecture.username,
+            password: this.architecture.password,
             host: this.architecture.host,
             port: this.architecture.port,
             "private-key": !!this.architecture["private-key"] ? File.read({path : this.architecture["private-key"]}) : undefined,
