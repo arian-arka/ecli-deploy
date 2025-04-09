@@ -10,6 +10,7 @@ class DeployEcliDeploy extends DeployBashFile_1.default {
         this.bash = [
             `#!/bin/bash`,
             `source $HOME/.bashrc`,
+            `cd $HOME`,
             `mkdir -p .ecli-deploy`,
             `cd .ecli-deploy`,
             `mkdir -p deployment`,
@@ -22,10 +23,13 @@ class DeployEcliDeploy extends DeployBashFile_1.default {
     }
     async condition() {
         try {
-            await this.runExec('ecli explain command:deploy.hello');
+            const result = await this.runExec('ecli explain command:deploy.hello');
+            console.log('ecli exlpian command:deploy.hello -> working');
+            console.log('result', result);
             return false;
         }
         catch (e) {
+            console.log('ecli exlpian command:deploy.hello -> not working');
             return true;
         }
     }

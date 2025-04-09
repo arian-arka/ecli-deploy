@@ -37,7 +37,7 @@ export default class hello extends Command {
     })*/
 
     async index(args: any) {
-
+        console.log(args);
         return 'hello world from ecli deploy';
     }
 

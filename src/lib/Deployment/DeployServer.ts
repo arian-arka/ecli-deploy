@@ -108,7 +108,7 @@ export default class DeployServer {
             passphrase: this.props.remote?.passphrase,
             port: this.props.remote?.port,
             logger: (new Logger({
-                path: joinPaths(this.props.remote?.cwd ?? '$HOME/.ecli-deploy', this.remoteLogPath, '_ssh.log'),
+                path: joinPaths(this.props.base ?? './', this.remoteLogPath, '_ssh.log'),
                 pipeString: (data) => {
                     //console.log(data);
                     return data;
@@ -130,7 +130,7 @@ export default class DeployServer {
             port: this.props.remote?.port,
             cwd: this.props.remote?.cwd,
             logger: (new Logger({
-                path: joinPaths(this.props.remote?.cwd ?? '$HOME/.ecli-deploy', this.remoteLogPath, '_sftp.log'),
+                path: joinPaths(this.props.base ?? './', this.remoteLogPath, '_sftp.log'),
                 pipeString: (data) => {
                     //console.log(data);
                     return data;

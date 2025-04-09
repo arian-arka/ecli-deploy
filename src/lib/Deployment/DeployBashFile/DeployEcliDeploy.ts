@@ -6,6 +6,7 @@ export default class DeployEcliDeploy extends DeployBashFile<{
     protected bash = [
         `#!/bin/bash`,
         `source $HOME/.bashrc`,
+        `cd $HOME`,
         `mkdir -p .ecli-deploy`,
         `cd .ecli-deploy`,
         `mkdir -p deployment`,
@@ -18,9 +19,12 @@ export default class DeployEcliDeploy extends DeployBashFile<{
 
     protected async condition(): Promise<boolean> {
         try {
-            await this.runExec('ecli explain command:deploy.hello');
+            const result = await this.runExec('ecli explain command:deploy.hello');
+            console.log('ecli exlpian command:deploy.hello -> working');
+            console.log('result',result);
             return false;
         } catch (e) {
+            console.log('ecli exlpian command:deploy.hello -> not working');
             return true;
         }
     }

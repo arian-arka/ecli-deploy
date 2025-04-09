@@ -74,7 +74,7 @@ class DeployServer {
     async result(name) {
     }
     async start() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
         this.ssh = await (new SSHRunner_1.SSHRunner({
             host: (_a = this.props.remote) === null || _a === void 0 ? void 0 : _a.host,
             username: (_b = this.props.remote) === null || _b === void 0 ? void 0 : _b.username,
@@ -83,7 +83,7 @@ class DeployServer {
             passphrase: (_e = this.props.remote) === null || _e === void 0 ? void 0 : _e.passphrase,
             port: (_f = this.props.remote) === null || _f === void 0 ? void 0 : _f.port,
             logger: (new Logger_1.default({
-                path: (0, path_1.joinPaths)((_h = (_g = this.props.remote) === null || _g === void 0 ? void 0 : _g.cwd) !== null && _h !== void 0 ? _h : '$HOME/.ecli-deploy', this.remoteLogPath, '_ssh.log'),
+                path: (0, path_1.joinPaths)((_g = this.props.base) !== null && _g !== void 0 ? _g : './', this.remoteLogPath, '_ssh.log'),
                 pipeString: (data) => {
                     //console.log(data);
                     return data;
@@ -93,17 +93,17 @@ class DeployServer {
             //.onOutput((data) => sshRawLogger.write(data))
             //.onOutput((data) => console.log(data))
             .start();
-        await this.ssh.exec(`mkdir -p ${(_j = this.props.remote) === null || _j === void 0 ? void 0 : _j.cwd}`);
+        await this.ssh.exec(`mkdir -p ${(_h = this.props.remote) === null || _h === void 0 ? void 0 : _h.cwd}`);
         this.sftp = await (new SFTPRunner_1.SFTPRunner({
-            host: (_k = this.props.remote) === null || _k === void 0 ? void 0 : _k.host,
-            username: (_l = this.props.remote) === null || _l === void 0 ? void 0 : _l.username,
-            password: (_m = this.props.remote) === null || _m === void 0 ? void 0 : _m.password,
-            privateKey: (_o = this.props.remote) === null || _o === void 0 ? void 0 : _o.private_key,
-            passphrase: (_p = this.props.remote) === null || _p === void 0 ? void 0 : _p.passphrase,
-            port: (_q = this.props.remote) === null || _q === void 0 ? void 0 : _q.port,
-            cwd: (_r = this.props.remote) === null || _r === void 0 ? void 0 : _r.cwd,
+            host: (_j = this.props.remote) === null || _j === void 0 ? void 0 : _j.host,
+            username: (_k = this.props.remote) === null || _k === void 0 ? void 0 : _k.username,
+            password: (_l = this.props.remote) === null || _l === void 0 ? void 0 : _l.password,
+            privateKey: (_m = this.props.remote) === null || _m === void 0 ? void 0 : _m.private_key,
+            passphrase: (_o = this.props.remote) === null || _o === void 0 ? void 0 : _o.passphrase,
+            port: (_p = this.props.remote) === null || _p === void 0 ? void 0 : _p.port,
+            cwd: (_q = this.props.remote) === null || _q === void 0 ? void 0 : _q.cwd,
             logger: (new Logger_1.default({
-                path: (0, path_1.joinPaths)((_t = (_s = this.props.remote) === null || _s === void 0 ? void 0 : _s.cwd) !== null && _t !== void 0 ? _t : '$HOME/.ecli-deploy', this.remoteLogPath, '_sftp.log'),
+                path: (0, path_1.joinPaths)((_r = this.props.base) !== null && _r !== void 0 ? _r : './', this.remoteLogPath, '_sftp.log'),
                 pipeString: (data) => {
                     //console.log(data);
                     return data;

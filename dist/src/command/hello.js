@@ -23,6 +23,7 @@ class hello extends Command_1.Command {
         additionalProperties: false
     })*/
     async index(args) {
+        console.log(args);
         return 'hello world from ecli deploy';
     }
 }
